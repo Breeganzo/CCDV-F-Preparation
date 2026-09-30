@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCDV-F Exam Prep — 180 Practice Questions</title>
+<meta name="description" content="Free practice exam for the Claude Certified Developer – Foundations (CCDV-F). 180 original questions weighted to the official blueprint, with instant feedback, timed mock exams, and per-domain scoring.">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CCDV-F Exam Prep — 180 Practice Questions">
+<meta property="og:description" content="Free, open-source practice exam for the Claude Certified Developer – Foundations certification. Timed mock exams, domain drills, instant explanations.">
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --line:#2a2f3a;
+    --fg:#e6e9ef; --muted:#9aa3b2; --accent:#c96442; --accent2:#7aa2f7;
+    --ok:#3fb950; --bad:#f85149; --warn:#d29922;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--fg);
+    font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-variant-ligatures:none;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:20px}
+  header{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px
+  }
+  header h1{font-size:17px;margin:0;font-weight:650;letter-spacing:.2px}
+  .badge{background:var(--panel2);border:1px solid var(--line);border-radius:999px;
+    padding:3px 11px;font-size:12px;color:var(--muted)}
+  .spacer{flex:1}
+  #timer{font-variant-numeric:tabular-nums;font-size:15px;font-weight:600;
+    background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 12px}
+  #timer.low{color:var(--bad);border-color:var(--bad)}
+  button{
+    font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--fg);padding:8px 15px;transition:.12s
+  }
+  button:hover:not(:disabled){border-color:var(--accent);background:#242832}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  button.primary:hover:not(:disabled){filter:brightness(1.1);background:var(--accent)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:16px}
+  .fbtoggle{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px 16px;
+    border:1px solid var(--line);border-radius:10px;cursor:pointer;background:rgba(255,255,255,.02)}
+  .fbtoggle:hover{border-color:var(--accent)}
+  .fbtoggle input{margin-top:3px;width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex:none}
+  .fbtoggle b{display:block;font-size:14px}
+  .fbtoggle em{display:block;font-style:normal;color:var(--dim);font-size:13px;margin-top:3px;line-height:1.5}
+  h2{font-size:20px;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 18px}
+
+  /* ---- mode picker ---- */
+  .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .mode{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:18px;
+    cursor:pointer;transition:.12s;text-align:left}
+  .mode:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .mode h3{margin:0 0 6px;font-size:15.5px}
+  .mode p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+  select{font:inherit;background:var(--panel2);color:var(--fg);border:1px solid var(--line);
+    border-radius:8px;padding:8px 11px;margin-top:10px;width:100%}
+
+  /* ---- question ---- */
+  .qmeta{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:14px;font-size:12px}
+  .tag{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:3px 9px;color:var(--muted)}
+  .tag.dom{color:var(--accent2);border-color:#2d3a55}
+  .stem{font-size:15.5px;line-height:1.65;margin-bottom:8px;white-space:pre-wrap}
+  .selnote{color:var(--warn);font-size:13px;font-weight:600;margin-bottom:14px}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:12px;align-items:flex-start;background:var(--panel2);
+    border:1px solid var(--line);border-radius:9px;padding:12px 14px;cursor:pointer;
+    text-align:left;width:100%;line-height:1.55}
+  .opt:hover{border-color:#3d4453}
+  .opt .k{flex:0 0 22px;height:22px;border-radius:5px;background:#2b3040;color:var(--muted);
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px}
+  .opt.sel{border-color:var(--accent2);background:#1b2231}
+  .opt.sel .k{background:var(--accent2);color:#0f1115}
+  .opt.correct{border-color:var(--ok);background:#12240f}
+  .opt.correct .k{background:var(--ok);color:#0f1115}
+  .opt.wrong{border-color:var(--bad);background:#2a1315}
+  .opt.wrong .k{background:var(--bad);color:#fff}
+  .opt:disabled{cursor:default;opacity:1}
+
+  /* ---- explanation ---- */
+  .exp{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;font-size:14px}
+  .exp .verdict{font-weight:700;margin-bottom:10px;font-size:15px}
+  .exp .verdict.ok{color:var(--ok)} .exp .verdict.bad{color:var(--bad)}
+  .exp h4{margin:14px 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+  .exp ul{margin:0;padding-left:20px} .exp li{margin-bottom:5px}
+  .exp a{color:var(--accent2)}
+
+  /* ---- nav ---- */
+  .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .gbtn{width:34px;height:34px;padding:0;font-size:12px;font-weight:600}
+  .gbtn.done{background:#1b2231;border-color:var(--accent2)}
+  .gbtn.flag{border-color:var(--warn)}
+  .gbtn.cur{background:var(--accent);border-color:var(--accent);color:#fff}
+  .gbtn.gok{background:#12240f;border-color:var(--ok)}
+  .gbtn.gbad{background:#2a1315;border-color:var(--bad)}
+
+  /* ---- results ---- */
+  .score{text-align:center;padding:14px 0 6px}
+  .score .big{font-size:52px;font-weight:700;line-height:1.1}
+  .score .big.pass{color:var(--ok)} .score .big.fail{color:var(--bad)}
+  .score .lbl{color:var(--muted);font-size:14px;margin-top:4px}
+  table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .bar{height:7px;background:var(--panel2);border-radius:4px;overflow:hidden;min-width:90px}
+  .bar i{display:block;height:100%;border-radius:4px}
+  .hidden{display:none !important}
+  kbd{background:var(--panel2);border:1px solid var(--line);border-bottom-width:2px;
+    border-radius:5px;padding:1px 6px;font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
+  .hint{color:var(--muted);font-size:12.5px;margin-top:14px}
+  .warnbox{background:#2a2213;border:1px solid var(--warn);border-radius:9px;padding:13px 15px;
+    font-size:13.5px;margin-bottom:16px;color:#f0d9a8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>CCDV-F &middot; Claude Certified Developer &ndash; Foundations</h1>
+    <span class="badge" id="bankCount">&mdash;</span>
+    <span class="spacer"></span>
+    <span id="timer" class="hidden">--:--</span>
+    <button id="quitBtn" class="hidden">Quit</button>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <section id="home">
+    <div class="card">
+      <h2>Pick a mode</h2>
+      <p class="sub">Real exam: <b>53 questions &middot; 120 minutes &middot; 720/1000 to pass</b> (&asymp;69% raw).
+         Multiple choice and multiple response.</p>
+      <div class="modes">
+        <button class="mode" data-mode="exam">
+          <h3>Exam simulation</h3>
+          <p>53 questions sampled at the official domain weights. 120-minute timer. Scored exactly like Pearson VUE.</p>
+        </button>
+        <button class="mode" data-mode="practice">
+          <h3>Practice</h3>
+          <p>Whole bank, shuffled, no timer. Work through all 150 at your own pace.</p>
+        </button>
+        <button class="mode" data-mode="drill">
+          <h3>Domain drill</h3>
+          <p>Hammer one weak domain.</p>
+          <select id="drillPick" onclick="event.stopPropagation()"></select>
+        </button>
+      </div>
+
+      <label class="fbtoggle" for="fbChk">
+        <input type="checkbox" id="fbChk" checked>
+        <span>
+          <b>Instant feedback after every question</b>
+          <em id="fbNote">On &mdash; correct/wrong plus the full explanation reveals as soon as you answer, in <u>all</u> modes including the timed exam.</em>
+        </span>
+      </label>
+
+      <p class="hint">Keyboard: <kbd>1</kbd>&ndash;<kbd>6</kbd> select &middot; <kbd>&larr;</kbd><kbd>&rarr;</kbd> navigate &middot; <kbd>Enter</kbd> next &middot; <kbd>F</kbd> flag</p>
+    </div>
+
+    <div class="card" id="resumeCard" style="display:none">
+      <h2>Unfinished session</h2>
+      <p class="sub" id="resumeInfo"></p>
+      <div class="nav">
+        <button class="primary" id="resumeBtn">Resume</button>
+        <button id="discardBtn">Discard</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Bank coverage</h2>
+      <p class="sub">Questions are weighted to Anthropic's published blueprint, so practice matches the real thing.</p>
+      <table id="coverage"></table>
+    </div>
+
+    <div class="card" id="historyCard" style="display:none">
+      <h2>Your attempts</h2>
+      <table id="history"></table>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz" class="hidden">
+    <div class="card">
+      <div class="qmeta" id="qmeta"></div>
+      <div class="stem" id="stem"></div>
+      <div class="selnote" id="selnote"></div>
+      <div class="opts" id="opts"></div>
+      <div class="exp hidden" id="exp"></div>
+    </div>
+    <div class="card">
+      <div class="nav">
+        <button id="prevBtn">&larr; Prev</button>
+        <button id="nextBtn" class="primary">Next &rarr;</button>
+        <button id="flagBtn">Flag</button>
+        <span class="spacer"></span>
+        <button id="submitBtn" class="primary">Submit</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" class="hidden">
+    <div class="card">
+      <div class="score">
+        <div class="big" id="scaledBig">&mdash;</div>
+        <div class="lbl" id="scoreLbl"></div>
+      </div>
+      <div id="verdictBox"></div>
+    </div>
+    <div class="card">
+      <h2>Per-domain breakdown</h2>
+      <p class="sub">The real score report shows percent-correct per domain. Anything under 60% is a hole.</p>
+      <table id="domTable"></table>
+    </div>
+    <div class="card">
+      <div class="nav">
+        <button class="primary" id="reviewBtn">Review every question</button>
+        <button id="redrillBtn">Re-drill the ones I missed</button>
+        <button id="homeBtn">Home</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="data/blueprint.js"></script>
+<script src="data/questions-d2-apps.js"></script>
+<script src="data/questions-d5-model.js"></script>
+<script src="data/questions-d1-agents.js"></script>
+<script src="data/questions-d8-tools-mcp.js"></script>
+<script src="data/questions-d6-prompt-context.js"></script>
+<script src="data/questions-d7-security.js"></script>
+<script src="data/questions-d3-claude-code.js"></script>
+<script src="data/questions-d4-eval-debug.js"></script>
+<script src="data/questions-r2-supplement.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

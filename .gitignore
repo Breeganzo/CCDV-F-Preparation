@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Node (only used by tools/validate.js + tools/bias.js, which need no deps)
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Superseded question banks kept locally for comparison only
+data/_old/
+
+# Never commit these
+.env
+.env.*
+*.pem
+*.key
+secrets.*
