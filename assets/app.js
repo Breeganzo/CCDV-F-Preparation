@@ -98,6 +98,9 @@
   function instant() { return S.mode === "review" || S.fb !== false; }
 
   function save() {
+    // Never persist a finished or review session; otherwise render() writes the
+    // completed attempt back to storage and it lingers as stale state.
+    if (!S || S.finished || S.mode === "review") return;
     try { localStorage.setItem(LS + "session", JSON.stringify(S)); } catch (e) {}
   }
   function clearSession() {
@@ -363,6 +366,7 @@
     var t = $("coverage");
     t.innerHTML = "<tr><th>Domain</th><th class='num'>Weight</th><th class='num'>In bank</th><th class='num'>Per exam</th></tr>";
     var total = 0;
+    var bankTarget = BP.domains.reduce(function (n, d) { return n + d.bank; }, 0);
     BP.domains.slice().sort(function (a, b) { return b.weight - a.weight; }).forEach(function (d) {
       var have = BANK.filter(function (q) { return q.d === d.id; }).length;
       total += have;
@@ -378,7 +382,7 @@
     var tr2 = el("tr");
     tr2.appendChild(el("td", null, "Total"));
     tr2.appendChild(el("td", "num", "100%"));
-    tr2.appendChild(el("td", "num", total + " / 150"));
+    tr2.appendChild(el("td", "num", total + " / " + bankTarget));
     tr2.appendChild(el("td", "num", String(BP.examQuestions)));
     tr2.style.fontWeight = "700";
     t.appendChild(tr2);
@@ -408,6 +412,7 @@
           $("resumeBtn").onclick = function () {
             S = s;
             if (S.endsAt && S.endsAt <= Date.now()) S.endsAt = null;
+            S.fb = fbPref(); // honour the toggle as it stands now, not when the session began
             enterQuiz();
           };
         } else { $("resumeCard").style.display = "none"; }
@@ -433,7 +438,7 @@
           ht.appendChild(tr);
         });
       } else { $("historyCard").style.display = "none"; }
-    } catch (e) {}
+    } catch (e) { $("historyCard").style.display = "none"; }
   }
 
   // ---------- wiring ----------
@@ -452,13 +457,27 @@
     };
   })();
 
-  document.querySelectorAll(".mode").forEach(function (b) {
-    b.onclick = function () {
-      var m = b.getAttribute("data-mode");
-      if (m === "drill") start("drill", { domain: +$("drillPick").value });
-      else start(m);
-    };
+  document.querySelectorAll(".mode[data-mode]").forEach(function (b) {
+    b.onclick = function () { start(b.getAttribute("data-mode")); };
   });
+  // The drill tile carries its own select, so it gets a dedicated start button
+  // rather than sharing the generic .mode handler.
+  $("drillBtn").onclick = function () {
+    var d = parseInt($("drillPick").value, 10);
+    if (isNaN(d)) { alert("Pick a domain first."); return; }
+    start("drill", { domain: d });
+  };
+  $("discardBtn").onclick = function () {
+    if (!confirm("Discard the unfinished session? This cannot be undone.")) return;
+    clearSession();
+    S = null;
+    renderHome();
+  };
+  $("clearHistBtn").onclick = function () {
+    if (!confirm("Delete all recorded attempts? This cannot be undone.")) return;
+    try { localStorage.removeItem(LS + "history"); } catch (e) {}
+    renderHome();
+  };
   $("prevBtn").onclick = function () { go(-1); };
   $("nextBtn").onclick = function () { go(1); };
   $("flagBtn").onclick = function () {

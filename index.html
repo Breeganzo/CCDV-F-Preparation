@@ -59,6 +59,17 @@
   .mode:hover{border-color:var(--accent);transform:translateY(-2px)}
   .mode h3{margin:0 0 6px;font-size:15.5px}
   .mode p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+  /* the drill tile holds its own controls, so it is a container, not a button */
+  .mode.static{cursor:default;display:flex;flex-direction:column}
+  .mode.static:hover{border-color:var(--line);transform:none}
+  .drillgo{width:100%;margin-top:9px;background:var(--accent);color:#fff;border:0;
+    border-radius:8px;padding:9px 12px;font:inherit;font-weight:600;cursor:pointer}
+  .drillgo:hover{filter:brightness(1.1)}
+  .cardhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+  .cardhead h2{margin:0}
+  .linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:12.5px;
+    text-decoration:underline;cursor:pointer;padding:0}
+  .linkbtn:hover{color:var(--bad)}
   select{font:inherit;background:var(--panel2);color:var(--fg);border:1px solid var(--line);
     border-radius:8px;padding:8px 11px;margin-top:10px;width:100%}
 
@@ -144,13 +155,14 @@
         </button>
         <button class="mode" data-mode="practice">
           <h3>Practice</h3>
-          <p>Whole bank, shuffled, no timer. Work through all 150 at your own pace.</p>
+          <p>Whole bank, shuffled, no timer. Work through every question at your own pace.</p>
         </button>
-        <button class="mode" data-mode="drill">
+        <div class="mode static">
           <h3>Domain drill</h3>
           <p>Hammer one weak domain.</p>
-          <select id="drillPick" onclick="event.stopPropagation()"></select>
-        </button>
+          <select id="drillPick" aria-label="Choose a domain to drill"></select>
+          <button class="drillgo" id="drillBtn">Start drill</button>
+        </div>
       </div>
 
       <label class="fbtoggle" for="fbChk">
@@ -180,7 +192,10 @@
     </div>
 
     <div class="card" id="historyCard" style="display:none">
-      <h2>Your attempts</h2>
+      <div class="cardhead">
+        <h2>Your attempts</h2>
+        <button class="linkbtn" id="clearHistBtn">Clear history</button>
+      </div>
       <table id="history"></table>
     </div>
   </section>
